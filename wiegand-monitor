@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Copyright 2012 VerveWorks Pty. Ltd.
+# monitors the wiegand kernel nodes and echos
+# any new reads to the console and broadcasts
+# UDP on port 9999
+#
+#
+lastReadNum=" "
+
+while [ 1 ]; do
+  IN=`cat "/sys/kernel/wiegand/read"`
+  set -- "$IN" 
+  IFS=":"; declare -a Array=($*) 
+
+  if [ $lastReadNum != "${Array[0]}" ] 
+  then  
+    lastReadNum="${Array[0]}"
+    echo "${Array[0]} Facility: ${Array[1]} Card: ${Array[2]}"
+    echo "${Array[0]} Facility: ${Array[1]} Card: ${Array[2]}" | nc -b -q 1 -u 192.168.1.255 9999 
+  fi
+  sleep 1;
+done

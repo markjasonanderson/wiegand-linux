@@ -2,7 +2,9 @@
 *.slo
 *.lo
 *.o
-
+*.ko 
+*.symvers
+*.order
 # Compiled Dynamic libraries
 *.so
 
